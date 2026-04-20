@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de amor</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd1d1, #ff9a9e);
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            overflow: hidden;
+            color: #800020; /* Color vino romántico */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(128, 0, 32, 0.15);
+            max-width: 600px;
+            width: 90%;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            color: #d10047;
+        }
+
+        p {
+            font-size: 1.4em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+            transition: transform 0.3s, background-color 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button:hover {
+            background-color: #d81b60;
+            transform: scale(1.05);
+        }
+
+        #timer {
+            font-size: 4em;
+            font-family: 'Playfair Display', serif;
+            color: #d10047;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos para las flores cayendo */
+        .flower {
+            position: absolute;
+            top: -10vh;
+            font-size: 2em;
+            animation: fall linear forwards;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="content">
+        <h1 class="fade-in">Manual de amor</h1>
+        <button class="fade-in" onclick="nextStep(1)">Siguiente</button>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="Sigamos El Viaje.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const content = document.getElementById('content');
+        const bgMusic = document.getElementById('bg-music');
+
+        function nextStep(step) {
+            // Reproducir música al primer clic
+            if (step === 1) {
+                bgMusic.play().catch(error => console.log("Interacción requerida para el audio"));
+            }
+
+            content.innerHTML = ''; // Limpiar contenedor
+
+            if (step === 1) {
+                content.innerHTML = `
+                    <p class="fade-in">¿Acaso existe un día específico para hacer algo especial?</p>
+                    <button class="fade-in" onclick="nextStep(2)">Siguiente</button>
+                `;
+            } 
+            else if (step === 2) {
+                content.innerHTML = `
+                    <p class="fade-in">Tú mi ser más amado, ¿qué fue lo que hiciste en mí?.<br><br>Te daré 15 segundos para pensar.</p>
+                    <div id="timer" class="fade-in">15</div>
+                `;
+                startTimer();
+            }
+            else if (step === 3) {
+                content.innerHTML = `
+                    <p class="fade-in">Sabes creo que lo que hiciste fue amarme, me enamoré perdidamente de ti.</p>
+                    <button class="fade-in" onclick="nextStep(4)">Siguiente</button>
+                `;
+            }
+            else if (step === 4) {
+                content.innerHTML = `
+                    <p class="fade-in">Tu esencia, tus pensamientos, tu originalidad de persona, tus valores y todo de ti me cautivaron.</p>
+                    <button class="fade-in" onclick="nextStep(5)">Siguiente</button>
+                `;
+            }
+            else if (step === 5) {
+                content.innerHTML = `
+                    <p class="fade-in">Tú eres y serás la mujer que quiero para toda la vida, como compañera, amiga y esposa.<br><br>Tú quiero que seas la mujer con la que prospere y que contigo siempre funcione el término de amar.</p>
+                `;
+                createFlowers();
+            }
+        }
+
+        function startTimer() {
+            let timeLeft = 15;
+            const timerElement = document.getElementById('timer');
+            
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerElement.innerText = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    setTimeout(() => {
+                        nextStep(3); // Pasar al siguiente texto automáticamente al terminar
+                    }, 500);
+                }
+            }, 1000);
+        }
+
+        function createFlowers() {
+            const flowerTypes = ['🌸', '🌹', '🌺', '🌷', '❤️', '🩷'];
+            const numberOfFlowers = 70;
+
+            for (let i = 0; i < numberOfFlowers; i++) {
+                let flower = document.createElement('div');
+                flower.className = 'flower';
+                // Elegir flor al azar
+                flower.innerText = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+                
+                // Posición horizontal aleatoria
+                flower.style.left = Math.random() * 100 + 'vw';
+                
+                // Tamaño aleatorio
+                flower.style.fontSize = (Math.random() * 1.5 + 1) + 'em';
+                
+                // Duración de caída y retraso aleatorios para que se vea natural
+                flower.style.animationDuration = (Math.random() * 3 + 3) + 's'; 
+                flower.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(flower);
+            }
+        }
+    </script>
+</body>
+</html>
